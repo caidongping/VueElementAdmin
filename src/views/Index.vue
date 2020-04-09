@@ -1,5 +1,6 @@
 <template>
     <el-container>
+      
       <el-header>
         <el-col style="width: 250px;" v-if="showcollapseOpen">
           <div class="grid-content">CI-Vue+ElementUI</div>
@@ -73,9 +74,7 @@
           </el-menu>
         </el-aside>
         <el-main>
-
           <router-view></router-view>
-
         </el-main>
 
       </el-container>

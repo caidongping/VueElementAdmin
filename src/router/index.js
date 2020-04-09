@@ -1,5 +1,5 @@
-
 import Vue from 'vue'
+
 import Router from 'vue-router'
 
 import Login from '@/views/Login'
@@ -10,6 +10,8 @@ import menus from '@/config/menu-config'
 
 Vue.use(Router)
 
+var childrenroutes = [];
+
 var routes = [
   {
     path: '/',
@@ -19,14 +21,15 @@ var routes = [
   {
     path: '/Index',
     name: 'Index',
-    component: Index
+    component: Index,
+    children: childrenroutes,
   }
 ]
 
 menus.forEach((item) => {
   item.sub.forEach((sub) => {
     sub.data.forEach((data) => {
-      routes.push({
+      childrenroutes.push({
         path: `/${data.componentName}`,
         name: data.componentName,
         component: () => import(`@/components/${data.componentName}`)
@@ -34,20 +37,7 @@ menus.forEach((item) => {
     })
   })
 })
-
-export default new Router({ routes })
-
-// export default new Router({
-//   routes: [
-//     {
-//       path: '/',
-//       name: 'Login',
-//       component: Login
-//     },
-//     {
-//       path: '/Index',
-//       name: 'Index',
-//       component: Index
-//     }
-//   ]
-// })
+export default new Router({
+  routes,
+  mode: "history"    // mode 设置为history ，去掉地址栏上的 # 号
+})
