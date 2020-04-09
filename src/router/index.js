@@ -37,6 +37,7 @@ menus.forEach((item) => {
     })
   })
 })
+
 export default new Router({
   routes,
   mode: "history"    // mode 设置为history ，去掉地址栏上的 # 号
