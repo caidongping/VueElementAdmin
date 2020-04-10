@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header class="elheader">
       <el-col style="width: 250px;" v-if="showcollapseOpen">
         <div class="grid-content">CI-Vue+ElementUI</div>
       </el-col>
@@ -48,7 +48,8 @@
 
     <el-container>
       <el-aside width="null">
-        <el-menu class="el-menu-vertical" router unique-opened :collapse="isCollapse">
+        <!-- :default-active="'Basic'"  :default-openeds="['Basic','Basic1']"  -->
+        <el-menu class="el-menu-vertical-demo" router :collapse="isCollapse">
           <el-submenu v-for="item in menu" :index="item.id" :key="item.id">
             <template slot="title">
               <i :class="item.icon"></i>
@@ -72,8 +73,10 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-
-      <el-main width="auto">
+      <el-main width="auto" style>
+        <el-header height="null" class="tagselheader">
+          <el-tag v-for="tag in tags" :key="tag.name" closable :type="tag.type">{{tag.name}}</el-tag>
+        </el-header>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -81,13 +84,16 @@
 </template>
 
 <style>
-.el-menu-vertical:not(.el-menu--collapse) {
+.el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 270px;
 }
 
-.el-menu-vertical {
+.el-menu-vertical-demo {
   height: calc(100% - 60px);
   min-height: calc(100vh - 60px);
+}
+.el-main {
+  padding: 0px;
 }
 
 .grid-content {
@@ -101,10 +107,40 @@
 .elbadgeelbutton {
   font-size: 18px;
 }
-
-.el-header {
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.elheader {
   background-color: #409eff;
   color: #fff;
+}
+.tagselheader {
+  height: 45px !important;
+  border-bottom: 1px solid #d8dce5;
+  border-top: 1px solid #d8dce5;
+  padding: 6px;
+}
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
+::-webkit-scrollbar  
+{  
+    width: 8px;  /*滚动条宽度*/
+    height: 8px;  /*滚动条高度*/
+}  
+  
+/*定义滚动条轨道 内阴影+圆角*/  
+::-webkit-scrollbar-track  
+{  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
+    border-radius: 5px;  /*滚动条的背景区域的圆角*/
+    background-color: #fff;/*滚动条的背景颜色*/  
+}  
+  
+/*定义滑块 内阴影+圆角*/  
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 5px;  /*滚动条的圆角*/
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);  
+    background-color:rgba(0, 0, 0, .1);  /*滚动条的背景颜色*/
 }
 </style>
 
@@ -118,7 +154,14 @@ export default {
       showcollapseOpen: true,
       showcollapseClose: false,
       isCollapse: false,
-      menu
+      menu,
+      tags: [
+        { name: "标签一", type: "info" },
+        { name: "标签二", type: "info" },
+        { name: "标签三", type: "info" },
+        { name: "标签四", type: "info" },
+        { name: "标签五", type: "info" }
+      ]
     };
   },
   methods: {

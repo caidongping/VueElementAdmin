@@ -1,18 +1,14 @@
 module.exports = [{
   name: '基础',
-  id: 'basic',
+  id: 'Basic',
   icon: 'el-icon-s-tools',
   sub: [{
     name: 'Layout 布局1',
-    id: 'BasicLayout1',
+    id: 'Basic1',
     icon: 'el-icon-s-tools',
     data: [{
       name: 'Layout 布局2',
       componentName: 'BasicLayout',
-      icon: 'el-icon-s-tools',
-    }, {
-      name: 'Container 布局容器2',
-      componentName: 'BasicContainer',
       icon: 'el-icon-s-tools',
     }]
   }, {
@@ -20,7 +16,7 @@ module.exports = [{
     id: 'BasicContainer1',
     icon: 'el-icon-s-tools',
     data: [{
-      name: 'Container 布局容器3',
+      name: 'Container 布局容器2',
       componentName: 'BasicContainer',
       icon: 'el-icon-s-tools',
     }]
@@ -29,15 +25,15 @@ module.exports = [{
 },
 {
   name: 'From',
-  id: 'From1',
+  id: 'from',
   icon: 'el-icon-phone',
   sub: [{
-    name: 'Radio 单选框1',
-    id: 'FormRadio1',
+    name: '表单',
+    id: 'from1',
     icon: 'el-icon-s-tools',
     data: [{
-      name: 'Radio 单选框2',
-      componentName: 'FormRadio',
+      name: '表单验证',
+      componentName: 'Form',
       icon: 'el-icon-s-tools',
     }, {
       name: 'Checkbox 多选框2',
@@ -45,4 +41,25 @@ module.exports = [{
       icon: 'el-icon-s-tools',
     }]
   }]
-}]
+},
+{
+  name: 'Data',
+  id: 'data',
+  icon: 'el-icon-tickets',
+  sub: [{
+    name: 'Table 表格',
+    id: 'table',
+    icon: 'el-icon-tickets',
+    data: [{
+      name: '基础表格',
+      componentName: 'Table',
+      icon: 'el-icon-s-tools',
+    }, {
+      name: 'Checkbox 多选框2',
+      componentName: 'FormCheckbox',
+      icon: 'el-icon-s-tools',
+    }]
+  }]
+}
+
+]

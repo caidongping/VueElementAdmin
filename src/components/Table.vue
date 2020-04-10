@@ -33,7 +33,13 @@
       </el-col>
 
       <el-col :span="4">
-        <el-button type="primary" icon="el-icon-search">搜索</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="openFullScreen1"
+          v-loading.fullscreen.lock="fullscreenLoading"
+        >搜索</el-button>
+        <el-button type="primary" icon="el-icon-edit">新增</el-button>
       </el-col>
     </el-row>
 
@@ -46,6 +52,7 @@
           height="calc(100% - 220px)"
           max-height="calc(100vh - 220px)"
           tooltip-effect="dark"
+          v-loading="loading"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55"></el-table-column>
@@ -98,10 +105,10 @@
 </style>
 
 <script>
+import table from "@/config/table";
 
-import table from '@/config/table'
+import select from "@/config/select";
 
-import select from '@/config/select'
 export default {
   methods: {
     handleSizeChange(val) {
@@ -112,12 +119,22 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    openFullScreen1() {
+     // this.fullscreenLoading = true;
+      this.loading = true;
+      setTimeout(() => {
+       // this.fullscreenLoading = false;
+        this.loading = false;
+      }, 2000);
     }
   },
   data() {
     return {
+      loading: false,
+      fullscreenLoading: false,
       multipleSelection: [],
-      tableData:table,
+      tableData: table,
       input: "",
       options: select,
       value: "",
