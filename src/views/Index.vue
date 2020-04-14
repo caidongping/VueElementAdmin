@@ -73,11 +73,28 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-main width="auto" style>
-        <el-header height="null" class="tagselheader">
-          <el-tag v-for="tag in tags" :key="tag.name" closable :type="tag.type">{{tag.name}}</el-tag>
-        </el-header>
-        <router-view></router-view>
+      <el-main width="auto">
+        <el-tabs
+          type="card"
+          @tab-click="tabClick"
+          v-if="options.length"
+          @tab-remove="tabRemove"
+          v-model="activeName"
+        >
+          <el-tab-pane
+            :key="item.name"
+            v-for="(item, index) in options"
+            :label="item.name"
+            :name="item.route"
+            :closable="item.close"
+          >
+          </el-tab-pane>
+         
+         
+          <router-view />
+
+
+        </el-tabs>
       </el-main>
     </el-container>
   </el-container>
@@ -120,27 +137,24 @@
   border-top: 1px solid #d8dce5;
   padding: 6px;
 }
-/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
-::-webkit-scrollbar  
-{  
-    width: 8px;  /*滚动条宽度*/
-    height: 8px;  /*滚动条高度*/
-}  
-  
-/*定义滚动条轨道 内阴影+圆角*/  
-::-webkit-scrollbar-track  
-{  
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
-    border-radius: 5px;  /*滚动条的背景区域的圆角*/
-    background-color: #fff;/*滚动条的背景颜色*/  
-}  
-  
-/*定义滑块 内阴影+圆角*/  
-::-webkit-scrollbar-thumb  
-{  
-    border-radius: 5px;  /*滚动条的圆角*/
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);  
-    background-color:rgba(0, 0, 0, .1);  /*滚动条的背景颜色*/
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  width: 8px; /*滚动条宽度*/
+  height: 8px; /*滚动条高度*/
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 5px; /*滚动条的背景区域的圆角*/
+  background-color: #fff; /*滚动条的背景颜色*/
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 5px; /*滚动条的圆角*/
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.1); /*滚动条的背景颜色*/
 }
 </style>
 
@@ -155,14 +169,12 @@ export default {
       showcollapseClose: false,
       isCollapse: false,
       menu,
-      tags: [
-        { name: "标签一", type: "info" },
-        { name: "标签二", type: "info" },
-        { name: "标签三", type: "info" },
-        { name: "标签四", type: "info" },
-        { name: "标签五", type: "info" }
-      ]
+      activeName: "/Main",
+      options: [{ route: "/Main", name: "首页", close: false }]
     };
+  },
+  beforeCreate() {
+    this.$router.push({ path: "/Main" }).catch(data => {});
   },
   methods: {
     collapseOpen() {
@@ -170,13 +182,50 @@ export default {
       this.showcollapseClose = false;
       this.isCollapse = false;
     },
+
     collapseClose() {
       this.showcollapseOpen = false;
       this.showcollapseClose = true;
       this.isCollapse = true;
     },
+
     loginout() {
+      sessionStorage.setItem("user", "");
       this.$router.push({ path: "/" });
+    },
+
+    tabClick(tab) {
+      this.$router.push({ path: tab.name }).catch(data => {});
+    },
+
+    tabRemove(route) {
+      let index = 0;
+      for (let option of this.options) {
+        if (option.route === route) {
+          break;
+        }
+        index++;
+      }
+      this.options.splice(index, 1);
+      this.activeName = this.options[this.options.length - 1].route;
+      this.$router
+        .push({ path: this.options[this.options.length - 1].route })
+        .catch(data => {});
+    }
+  },
+  watch: {
+    $route(to) {
+      let flag = false;
+      this.activeName = to.path;
+      for (let option of this.options) {
+        if (option.name === to.name) {
+          flag = true;
+          break;
+        }
+      }
+      if (!flag) {
+        this.options.push({ route: to.path, name: to.name, close: true });
+      }
     }
   }
 };

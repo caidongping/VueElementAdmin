@@ -23,15 +23,18 @@ var routes = [
     name: 'Index',
     component: Index,
     children: childrenroutes,
+    redirect:'/Main'
   }
 ]
+
+childrenroutes.push({ path: '/Main', name: '首页',   component: () => import(`@/components/Main`) });
 
 menus.forEach((item) => {
   item.sub.forEach((sub) => {
     sub.data.forEach((data) => {
       childrenroutes.push({
         path: `/${data.componentName}`,
-        name: data.componentName,
+        name: data.name,
         component: () => import(`@/components/${data.componentName}`)
       })
     })

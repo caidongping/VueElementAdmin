@@ -10,6 +10,9 @@ module.exports = [{
       name: 'Layout 布局2',
       componentName: 'BasicLayout',
       icon: 'el-icon-s-tools',
+      meta: {
+        isLogin: false,
+      }
     }]
   }, {
     name: 'Container 布局容器1',
@@ -19,6 +22,9 @@ module.exports = [{
       name: 'Container 布局容器2',
       componentName: 'BasicContainer',
       icon: 'el-icon-s-tools',
+      meta: {
+        isLogin: false,
+      }
     }]
   },
   ]
@@ -35,10 +41,16 @@ module.exports = [{
       name: '表单验证',
       componentName: 'Form',
       icon: 'el-icon-s-tools',
+      meta: {
+        isLogin: false,
+      }
     }, {
       name: 'Checkbox 多选框2',
       componentName: 'FormCheckbox',
       icon: 'el-icon-s-tools',
+      meta: {
+        isLogin: false,
+      }
     }]
   }]
 },
@@ -54,12 +66,9 @@ module.exports = [{
       name: '基础表格',
       componentName: 'Table',
       icon: 'el-icon-s-tools',
-    }, {
-      name: 'Checkbox 多选框2',
-      componentName: 'FormCheckbox',
-      icon: 'el-icon-s-tools',
+      meta: {
+        isLogin: false,
+      }
     }]
   }]
-}
-
-]
+}]
