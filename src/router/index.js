@@ -27,7 +27,7 @@ var routes = [
   }
 ]
 
-childrenroutes.push({ path: '/Main', name: '首页',   component: () => import(`@/components/Main`) });
+childrenroutes.push({ path: '/Main', name: '首页',   component: () => import(`@/views/Example/Main`) });
 
 menus.forEach((item) => {
   item.sub.forEach((sub) => {
@@ -35,7 +35,7 @@ menus.forEach((item) => {
       childrenroutes.push({
         path: `/${data.componentName}`,
         name: data.name,
-        component: () => import(`@/components/${data.componentName}`)
+        component: () => import(`@/views/Example/${data.componentName}`)
       })
     })
   })

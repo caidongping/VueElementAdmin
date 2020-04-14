@@ -1,45 +1,22 @@
-module.exports = [{
-  name: '基础',
-  id: 'Basic',
-  icon: 'el-icon-s-tools',
-  sub: [{
-    name: 'Layout 布局1',
-    id: 'Basic1',
-    icon: 'el-icon-s-tools',
-    data: [{
-      name: 'Layout 布局2',
-      componentName: 'BasicLayout',
-      icon: 'el-icon-s-tools',
-      meta: {
-        isLogin: false,
-      }
-    }]
-  }, {
-    name: 'Container 布局容器1',
-    id: 'BasicContainer1',
-    icon: 'el-icon-s-tools',
-    data: [{
-      name: 'Container 布局容器2',
-      componentName: 'BasicContainer',
-      icon: 'el-icon-s-tools',
-      meta: {
-        isLogin: false,
-      }
-    }]
-  },
-  ]
-},
+module.exports = [
 {
-  name: 'From',
-  id: 'from',
+  name: '示例',
+  id: 'example',
   icon: 'el-icon-phone',
   sub: [{
-    name: '表单',
-    id: 'from1',
+    name: '示例',
+    id: 'example1',
     icon: 'el-icon-s-tools',
     data: [{
       name: '表单验证',
-      componentName: 'Form',
+      componentName: 'FromValidator',
+      icon: 'el-icon-s-tools',
+      meta: {
+        isLogin: false,
+      }
+    }, {
+      name: 'Table',
+      componentName: 'Table',
       icon: 'el-icon-s-tools',
       meta: {
         isLogin: false,
@@ -51,7 +28,9 @@ module.exports = [{
       meta: {
         isLogin: false,
       }
-    }]
+    }
+  
+  ]
   }]
 },
 {
@@ -64,7 +43,7 @@ module.exports = [{
     icon: 'el-icon-tickets',
     data: [{
       name: '基础表格',
-      componentName: 'Table',
+      componentName: 'BasicLayout',
       icon: 'el-icon-s-tools',
       meta: {
         isLogin: false,
