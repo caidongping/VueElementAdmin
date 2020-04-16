@@ -56,7 +56,7 @@
               <span v-text="item.name"></span>
             </template>
 
-            <el-submenu v-for="sub in item.sub" :index="sub.id" :key="sub.id">
+            <el-submenu v-if="item.level" v-for="sub in item.sub" :index="sub.id" :key="sub.id">
               <template slot="title">
                 <i :class="sub.icon"></i>
                 <span v-text="sub.name"></span>
@@ -67,34 +67,63 @@
                 :index="data.componentName"
                 :key="data.componentName"
               >
+                <i :class="data.icon"></i>
                 <span v-text="data.name"></span>
               </el-menu-item>
             </el-submenu>
+
+            <el-menu-item
+              v-for="data in item.data"
+              :index="data.componentName"
+              :key="data.componentName"
+            >
+              <i :class="data.icon"></i>
+              <span v-text="data.name"></span>
+            </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
       <el-main width="auto">
-        <el-tabs
-          type="card"
-          @tab-click="tabClick"
-          v-if="options.length"
-          @tab-remove="tabRemove"
-          v-model="activeName"
-        >
-          <el-tab-pane
-            :key="item.name"
-            v-for="(item, index) in options"
-            :label="item.name"
-            :name="item.route"
-            :closable="item.close"
-          >
-          </el-tab-pane>
-         
-         
-          <router-view />
+        <el-header style="padding:0px 0px">
+          <el-row type="flex">
+            <el-col :span="23">
+              <el-tabs
+                type="card"
+                @tab-click="tabClick"
+                v-if="options.length"
+                @tab-remove="tabRemove"
+                v-model="activeName"
+                style="border-bottom:0px !important"
+              >
+                <el-tab-pane
+                  :key="item.name"
+                  v-for="(item, index) in options"
+                  :label="item.name"
+                  :name="item.route"
+                  :closable="item.close"
+                ></el-tab-pane>
+              </el-tabs>
+            </el-col>
 
+            <el-col :span="1">
+              <el-dropdown>
+                <el-button>
+                  <i class="el-icon-s-operation el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item @click.native="closeOther">
+                    <i class="el-icon-user"></i>关闭其他选项卡
+                  </el-dropdown-item>
+                  <el-dropdown-item @click.native="closeAll">
+                    <i class="el-icon-lock"></i>关闭全部选项卡
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-col>
+          </el-row>
+        </el-header>
 
-        </el-tabs>
+        <router-view />
       </el-main>
     </el-container>
   </el-container>
@@ -192,6 +221,26 @@ export default {
     loginout() {
       sessionStorage.setItem("user", "");
       this.$router.push({ path: "/" });
+    },
+
+    closeOther() {
+      if (this.activeName == "/Main") {
+        this.options.splice(1, this.options.length);
+        return;
+      }
+      let data = {};
+      for (let option of this.options) {
+        if (option.route === this.activeName) {
+          data = option;
+        }
+      }
+      this.options.splice(1, 1, data);
+      this.options.splice(2, this.options.length);
+    },
+
+    closeAll() {
+      this.options.splice(1, this.options.length);
+      this.$router.push({ path: "/Main" }).catch(data => {});
     },
 
     tabClick(tab) {

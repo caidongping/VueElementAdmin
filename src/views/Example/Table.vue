@@ -1,9 +1,11 @@
 <template>
-  <div style=" padding: 10px;">
-    <el-row :gutter="20">
+  <div>
+    <el-row>
+
       <el-col :span="4">
         <el-input v-model="input" placeholder="请输入内容"></el-input>
       </el-col>
+
       <el-col :span="6">
         <el-date-picker
           v-model="value2"
@@ -41,142 +43,157 @@
         >搜索</el-button>
         <el-button type="primary" icon="el-icon-edit">新增</el-button>
       </el-col>
-    </el-row>
 
-    <el-row>
-      <el-col :span="24">
-        <el-table
-          :data="tableData"
-          ref="multipleTable"
-          border
-          height="calc(100% - 220px)"
-          max-height="calc(100vh - 220px)"
-          tooltip-effect="dark"
-          v-loading="loading"
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="date" fixed label="日期" width="140">
-            <template slot-scope="scope">
-              <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.date }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="name" fixed label="姓名" width="120">
-            <template slot-scope="scope">
-              <el-popover trigger="hover" placement="top">
-                <p>姓名: {{ scope.row.name }}</p>
-                <p>住址: {{ scope.row.address }}</p>
-                <div slot="reference" class="name-wrapper">
-                  <el-tag size="medium">{{ scope.row.name }}</el-tag>
-                </div>
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column prop="address" fixed label="地址"></el-table-column>
-          <el-table-column fixed="right" label="操作" width="100">
-            <template slot-scope="scope">
-              <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-              <el-button type="text" size="small">编辑</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
     </el-row>
-
-    <el-col :span="24">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
-        border
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
-      ></el-pagination>
-    </el-col>
+    
+    <commonTable
+      :columns="columns"
+      :data="tableData"
+      :pager="page"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange"
+    >
+      <!-- <el-table-column slot="table_oper" align="center" label="操作" width="150" :resizable="false">
+          <template slot-scope="scope">
+              <el-button class="edit-bgc" icon="el-icon-edit" @click="editTableData(scope.row)">修改</el-button>
+          </template>
+      </el-table-column>-->
+    </commonTable>
   </div>
 </template>
-<style>
-.el-row {
-  margin-bottom: 10px;
-}
-</style>
 
 <script>
-import table from "@/config/table";
-
-import select from "@/config/select";
+import commonTable from "@/components/common/commonTable";
 
 export default {
-  methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    openFullScreen1() {
-     // this.fullscreenLoading = true;
-      this.loading = true;
-      setTimeout(() => {
-       // this.fullscreenLoading = false;
-        this.loading = false;
-      }, 2000);
-    }
-  },
+  components: { commonTable },
   data() {
     return {
-      loading: false,
-      fullscreenLoading: false,
-      multipleSelection: [],
-      tableData: table,
-      input: "",
-      options: select,
-      value: "",
-      radio: "1",
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "最近一周",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
-      },
-      value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-      value2: "",
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4
+      columns: [
+        { prop: "date", label: "日期", width: "150", align: "center" },
+        {
+          prop: "name",
+          label: "姓名",
+          width: "200",
+          align: "center",
+          formatter: this.formatter
+        },
+        { prop: "address", label: "地址", align: "center" }
+      ],
+      tableData: [],
+      page: {
+        pageNo: 1,
+        limit: 10,
+        sizes: [10, 50, 100],
+        total: 0
+      }
     };
+  },
+  mounted() {
+    this.tableData = [
+      {
+        date: "2016-05-02",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1518 弄"
+      },
+      {
+        date: "2016-05-04",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1517 弄"
+      },
+      {
+        date: "2016-05-01",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1519 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      },
+      {
+        date: "2016-05-03",
+        name: "王小虎",
+        address: "上海市普陀区金沙江路 1516 弄"
+      }
+    ];
+    this.page.total = this.tableData.length;
+  },
+  methods: {
+    // 重新渲染name列
+    formatter(row, column, cellValue) {
+      return "hello " + row.name;
+    },
+    // 改变页面大小处理
+    handleSizeChange(val) {},
+    // 翻页处理
+    handleCurrentChange(val) {},
+    editTableData(row) {}
   }
 };
 </script>

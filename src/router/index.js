@@ -23,22 +23,33 @@ var routes = [
     name: 'Index',
     component: Index,
     children: childrenroutes,
-    redirect:'/Main'
+    redirect: '/Main'
   }
 ]
 
-childrenroutes.push({ path: '/Main', name: '首页',   component: () => import(`@/views/Example/Main`) });
+childrenroutes.push({ path: '/Main', name: '首页', component: () => import(`@/views/Example/Main`) });
 
 menus.forEach((item) => {
-  item.sub.forEach((sub) => {
-    sub.data.forEach((data) => {
+  if (item.level) {
+    item.sub.forEach((sub) => {
+      sub.data.forEach((data) => {
+        childrenroutes.push({
+          path: `/${data.componentName}`,
+          name: data.name,
+          component: () => import(`@/views/Example/${data.componentName}`)
+        })
+      })
+    })
+  }
+  else {
+    item.data.forEach((data) => {
       childrenroutes.push({
         path: `/${data.componentName}`,
         name: data.name,
         component: () => import(`@/views/Example/${data.componentName}`)
       })
     })
-  })
+  }
 })
 
 export default new Router({
