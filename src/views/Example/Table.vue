@@ -1,199 +1,78 @@
 <template>
-  <div>
-    <el-row>
-
-      <el-col :span="4">
-        <el-input v-model="input" placeholder="请输入内容"></el-input>
-      </el-col>
-
-      <el-col :span="6">
-        <el-date-picker
-          v-model="value2"
-          type="daterange"
-          align="right"
-          unlink-panels
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions"
-        ></el-date-picker>
-      </el-col>
-      <el-col :span="4">
-        <el-select v-model="value" placeholder="请选择">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-col>
-
-      <el-col :span="4">
-        <el-radio v-model="radio" label="1" style="margin-top:15px">备选项1</el-radio>
-        <el-radio v-model="radio" label="2" style="margin-top:15px">备选项2</el-radio>
-      </el-col>
-
-      <el-col :span="4">
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          @click="openFullScreen1"
-          v-loading.fullscreen.lock="fullscreenLoading"
-        >搜索</el-button>
-        <el-button type="primary" icon="el-icon-edit">新增</el-button>
-      </el-col>
-
-    </el-row>
-    
+  <div class="common_bgc">
+    <!-- table表格 -->
     <commonTable
-      :columns="columns"
-      :data="tableData"
-      :pager="page"
-      @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange"
-    >
-      <!-- <el-table-column slot="table_oper" align="center" label="操作" width="150" :resizable="false">
-          <template slot-scope="scope">
-              <el-button class="edit-bgc" icon="el-icon-edit" @click="editTableData(scope.row)">修改</el-button>
-          </template>
-      </el-table-column>-->
-    </commonTable>
+      :tableData="tableData"
+      :tabCloum="tabCloum"
+      :tableSelect="tableSelect"
+      :tableRadio="tableRadio"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :tableOperateList="tableOperateList"
+      :total="total"
+    ></commonTable>
   </div>
 </template>
 
 <script>
 import commonTable from "@/components/common/commonTable";
 
+import table from "@/config/table";
+
+import tableOperate from "@/config/tableOperate";
+
 export default {
   components: { commonTable },
   data() {
     return {
-      columns: [
-        { prop: "date", label: "日期", width: "150", align: "center" },
+      pageNum: 1,
+      pageSize: 10,
+      total: 20,
+      tableOperateList: tableOperate, //传table里面有那些操作
+      tableData: table,
+      tableSelect: true, //是否有多选操作列
+      tableRadio: true, //是否有单选操作列
+      tabCloum: [
+        { label: "设备编号", prop: "s1", width: "100px", fixed: true },
+        { label: "设备名称", prop: "s2", width: "100px" },
         {
-          prop: "name",
-          label: "姓名",
-          width: "200",
-          align: "center",
-          formatter: this.formatter
+          label: "区域名称",
+          prop: "s3",
+          width: "250px",
+          tooltips: [
+            {
+              name: "姓名",
+              content: "s2"
+            },
+            {
+              name: "住址",
+              content: "s3"
+            }
+          ]
+        }, //ellipsis预留移入显示
+        {
+          label: "街道名称",
+          prop: "s4",
+          width: "250px",
+          render: row => {
+            if (row.s4 == "1") {
+              return "<div style='color: red;'>街道1</div>";
+            } else {
+              return "<div style='color: yellowgreen;'>街道2</div>";
+            }
+          }
         },
-        { prop: "address", label: "地址", align: "center" }
-      ],
-      tableData: [],
-      page: {
-        pageNo: 1,
-        limit: 10,
-        sizes: [10, 50, 100],
-        total: 0
-      }
+        { label: "站点名称", prop: "s5" },
+        { label: "挂载设备数量", width: "250px", prop: "s6" },
+        { label: "挂载设备数量", width: "250px", prop: "s6" },
+        { label: "挂载设备数量", width: "250px", prop: "s6" },
+        { slot: "button", name: "操作" }
+      ] // 操作列
     };
   },
-  mounted() {
-    this.tableData = [
-      {
-        date: "2016-05-02",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1518 弄"
-      },
-      {
-        date: "2016-05-04",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1517 弄"
-      },
-      {
-        date: "2016-05-01",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1519 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      },
-      {
-        date: "2016-05-03",
-        name: "王小虎",
-        address: "上海市普陀区金沙江路 1516 弄"
-      }
-    ];
-    this.page.total = this.tableData.length;
-  },
-  methods: {
-    // 重新渲染name列
-    formatter(row, column, cellValue) {
-      return "hello " + row.name;
-    },
-    // 改变页面大小处理
-    handleSizeChange(val) {},
-    // 翻页处理
-    handleCurrentChange(val) {},
-    editTableData(row) {}
-  }
+  created() {},
+  mounted() {},
+  watch: {},
+  methods: {}
 };
 </script>

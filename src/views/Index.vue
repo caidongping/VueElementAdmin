@@ -166,25 +166,31 @@
   border-top: 1px solid #d8dce5;
   padding: 6px;
 }
+
+
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-::-webkit-scrollbar {
-  width: 8px; /*滚动条宽度*/
-  height: 8px; /*滚动条高度*/
-}
+  ::-webkit-scrollbar{
+    width: 7px;
+    height: 7px;
+    background-color: #F5F5F5;
+  }
 
-/*定义滚动条轨道 内阴影+圆角*/
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 5px; /*滚动条的背景区域的圆角*/
-  background-color: #fff; /*滚动条的背景颜色*/
-}
+  /*定义滚动条轨道 内阴影+圆角*/
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+  }
 
-/*定义滑块 内阴影+圆角*/
-::-webkit-scrollbar-thumb {
-  border-radius: 5px; /*滚动条的圆角*/
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  background-color: rgba(0, 0, 0, 0.1); /*滚动条的背景颜色*/
-}
+  /*定义滑块 内阴影+圆角*/
+  ::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
+    background-color: #c8c8c8;
+  }
+
 </style>
 
 <script>
