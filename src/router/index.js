@@ -36,7 +36,7 @@ menus.forEach((item) => {
         childrenroutes.push({
           path: `/${data.componentName}`,
           name: data.name,
-          component: () => import(`@/views/Example/${data.componentName}`)
+          component: () => import(`@/views/Example/${data.componentName}`),
         })
       })
     })
@@ -46,12 +46,11 @@ menus.forEach((item) => {
       childrenroutes.push({
         path: `/${data.componentName}`,
         name: data.name,
-        component: () => import(`@/views/Example/${data.componentName}`)
+        component: () => import(`@/views/Example/${data.componentName}`),
       })
     })
   }
 })
-
 export default new Router({
   routes,
   mode: "history"    // mode 设置为history ，去掉地址栏上的 # 号

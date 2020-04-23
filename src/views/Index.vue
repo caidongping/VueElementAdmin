@@ -66,6 +66,7 @@
                 v-for="data in sub.data"
                 :index="data.componentName"
                 :key="data.componentName"
+                @click="switchSubMenu(data)"
               >
                 <i :class="data.icon"></i>
                 <span v-text="data.name"></span>
@@ -76,6 +77,7 @@
               v-for="data in item.data"
               :index="data.componentName"
               :key="data.componentName"
+              @click="switchSubMenu(data)"
             >
               <i :class="data.icon"></i>
               <span v-text="data.name"></span>
@@ -167,30 +169,28 @@
   padding: 6px;
 }
 
-
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-  ::-webkit-scrollbar{
-    width: 7px;
-    height: 7px;
-    background-color: #F5F5F5;
-  }
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  background-color: #f5f5f5;
+}
 
-  /*定义滚动条轨道 内阴影+圆角*/
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    background-color: #F5F5F5;
-  }
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
 
-  /*定义滑块 内阴影+圆角*/
-  ::-webkit-scrollbar-thumb{
-    border-radius: 10px;
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .1);
-    background-color: #c8c8c8;
-  }
-
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: #c8c8c8;
+}
 </style>
 
 <script>
@@ -266,10 +266,15 @@ export default {
       this.$router
         .push({ path: this.options[this.options.length - 1].route })
         .catch(data => {});
+    },
+    switchSubMenu(route) {
+     // console.log(route);
     }
   },
   watch: {
     $route(to) {
+    //  console.log(to);
+      // console.log(this.$router.options);
       let flag = false;
       this.activeName = to.path;
       for (let option of this.options) {

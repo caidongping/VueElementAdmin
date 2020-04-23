@@ -25,6 +25,8 @@ new Vue({
 })
 
 router.beforeEach((to, from, next) => {
+  // console.log(to);
+  // console.log(from);
   // console.log(to.name);
   // console.log(sessionStorage.getItem("user"));
   // if(sessionStorage.getItem("user")==='admin'|| to.name === 'Login')
@@ -35,9 +37,13 @@ router.beforeEach((to, from, next) => {
 });
 router.beforeResolve((to, from, next) => {
   // console.log('beforeResolve');
+  // console.log(to);
+  // console.log(from);
   next();
 });
 router.afterEach((to, from) => {
+  // console.log(to);
+  // console.log(from);
   // console.log('afterEach 全局后置钩子');
   // if (sessionStorage.getItem("user")==='' && to.name !== 'login') {
   //   router.push({ name: 'login' }); // 跳转login

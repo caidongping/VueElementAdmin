@@ -1,14 +1,13 @@
 <template>
   <div>
     <!-- table -->
-    <div>
       <el-table
         :data="tableData"
         border
         ref="table"
         :height="tableHeight"
         @selection-change="handleSelectionChange"
-        style="width: 100%"
+        style="width: 100% ;"
       >
         <el-table-column type="selection" fixed align="center" width="50" v-if="tableSelect"></el-table-column>
 
@@ -84,11 +83,11 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+   
     <!-- 分页 -->
     <div v-show="total!=0">
       <el-pagination
-        style="text-align: center;margin:20px 0;"
+        style="padding:10px 0px 0px 10px;"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page.sync="newPageNum"
@@ -137,6 +136,8 @@ export default {
       radioStationVal: "",
       tableHeight: 50
     };
+
+   // console.log(this.tableData)
   },
   created() {},
   mounted() {
@@ -167,16 +168,17 @@ export default {
   mounted: function() {
     this.$nextTick(function() {
       this.tableHeight =
-        window.innerHeight - this.$refs.table.$el.offsetTop - 75;
+        window.innerHeight - this.$refs.table.$el.offsetTop - 50;
 
       // 监听窗口大小变化
       let self = this;
       window.onresize = function() {
         self.tableHeight =
-          window.innerHeight - self.$refs.table.$el.offsetTop - 75;
+          window.innerHeight - self.$refs.table.$el.offsetTop - 50;
       };
     });
-    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 
+    //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   }
 };
 </script>

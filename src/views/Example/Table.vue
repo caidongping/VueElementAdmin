@@ -1,7 +1,8 @@
 <template>
-  <div class="common_bgc">
+<div>
+     
     <!-- table表格 -->
-    <commonTable
+    <common-table
       :tableData="tableData"
       :tabCloum="tabCloum"
       :tableSelect="tableSelect"
@@ -10,7 +11,9 @@
       :pageSize="pageSize"
       :tableOperateList="tableOperateList"
       :total="total"
-    ></commonTable>
+    ></common-table>
+
+
   </div>
 </template>
 
@@ -63,14 +66,16 @@ export default {
           }
         },
         { label: "站点名称", prop: "s5" },
-        { label: "挂载设备数量", width: "250px", prop: "s6" },
-        { label: "挂载设备数量", width: "250px", prop: "s6" },
-        { label: "挂载设备数量", width: "250px", prop: "s6" },
+        // { label: "挂载设备数量", width: "250px", prop: "s6" },
+        // { label: "挂载设备数量", width: "250px", prop: "s6" },
+        // { label: "挂载设备数量", width: "250px", prop: "s6" },
         { slot: "button", name: "操作" }
       ] // 操作列
     };
   },
-  created() {},
+  created() {
+    console.log(this.$router);
+  },
   mounted() {},
   watch: {},
   methods: {}

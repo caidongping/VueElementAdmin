@@ -15,26 +15,28 @@ module.exports = [
       name: 'Table',
       componentName: 'Table',
       icon: 'el-icon-s-tools',
-      operation: [
-        {
-          name: "编辑",
-          // icon: "el-icon-edit",
-          type: "primary"
-        },
-        {
-          name: "详情",
-          // icon: "el-icon-chat-line-square",
-          type: "success"
-        },
-        {
-          name: "删除",
-          // icon: "el-icon-delete",
-          type: "danger"
-        }
-      ],
-      meta: {
+      meta:
+      {
         isLogin: false,
-      }
+        permission: [
+          {
+            name: "编辑",
+            // icon: "el-icon-edit",
+            type: "primary"
+          },
+          {
+            name: "详情",
+            // icon: "el-icon-chat-line-square",
+            type: "success"
+          },
+          {
+            name: "删除",
+            // icon: "el-icon-delete",
+            type: "danger"
+          },
+          
+        ],
+      },
     }, {
       name: 'Checkbox 多选框2',
       componentName: 'FormCheckbox',
