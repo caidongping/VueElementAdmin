@@ -1,89 +1,92 @@
 <template>
-  <div>
+  <div style="padding: 10px">
     <!-- table -->
-      <el-table
-        :data="tableData"
-        border
-        ref="table"
-        :height="tableHeight"
-        @selection-change="handleSelectionChange"
-        style="width: 100% ;"
-      >
-        <el-table-column type="selection" fixed align="center" width="50" v-if="tableSelect"></el-table-column>
+    <el-table
+      :data="tableData"
+      border
+      ref="table"
+      :height="tableHeight"
+      @selection-change="handleSelectionChange"
+      style="width: 100% ;"
+    >
+      <el-table-column type="selection" align="center" width="50" v-if="tableSelect"></el-table-column>
 
-        <el-table-column align="center" fixed width="60" v-if="tableRadio">
-          <template slot-scope="scope">
-            <el-radio
-              v-model="radioStationVal"
-              :label="scope.$index"
-              @change="radioChange(scope.$index)"
-            >{{null}}</el-radio>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="序号" fixed align="center" width="50">
-          <template slot-scope="scope">
-            <span v-text="(pageNum-1)*pageSize+(scope.$index+1)"></span>
-          </template>
-        </el-table-column>
-
-        <template v-for="(item, index) in tabCloum">
-          <!-- 操作列 -->
-          <slot v-if="item.slot" :name="item.slot"></slot>
-          <!-- 普通列 -->
-          <el-table-column
-            v-else
-            :key="index"
-            :label="item.label"
-            :width="item.width"
-            :fixed="item.fixed"
-            align="center"
-          >
-            <template slot-scope="scope">
-              <div v-if="scope.row[item.prop]==null||scope.row[item.prop]==''">
-                <span>-</span>
-              </div>
-              <div v-else>
-                <div v-if="item.tooltips">
-                  <el-popover trigger="hover" placement="top">
-                    <p
-                      v-for="tooltip in item.tooltips"
-                    >{{tooltip.name}} : {{scope.row[tooltip.content]}}</p>
-                    <div slot="reference" class="name-wrapper">
-                      <el-tag size="medium">{{scope.row[item.prop]}}</el-tag>
-                    </div>
-                  </el-popover>
-                </div>
-
-                <div v-else>
-                  <span v-if="item.render" v-html="item.render(scope.row)"></span>
-                  <span v-else v-text="scope.row[item.prop]"></span>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
+      <el-table-column align="center" width="60" v-if="tableRadio">
+        <template slot-scope="scope">
+          <el-radio
+            v-model="radioStationVal"
+            :label="scope.$index"
+            @change="radioChange(scope.$index)"
+          >{{null}}</el-radio>
         </template>
+      </el-table-column>
 
+      <el-table-column label="序号" align="center" width="50">
+        <template slot-scope="scope">
+          <span v-text="(pageNum-1)*pageSize+(scope.$index+1)"></span>
+        </template>
+      </el-table-column>
+
+      <template v-for="(item, index) in tabCloum">
+        <!-- 操作列 -->
+        <slot v-if="item.slot" :name="item.slot"></slot>
+
+        <!-- 普通列 -->
         <el-table-column
-          label="操作"
-          v-if="tableOperateList.length!=0"
+          v-else
+          :key="index"
+          :label="item.label"
+          :width="item.width"
+          :fixed="item.fixed"
           align="center"
-          fixed="right"
-          width="270"
         >
           <template slot-scope="scope">
-            <!-- 操作按钮 -->
-            <el-button
-              v-for="(tableOperate,index) in tableOperateList"
-              :key="index"
-              :icon="tableOperate.icon"
-              :type="tableOperate.type"
-              size="mini"
-            >{{tableOperate.name}}</el-button>
+            <div v-if="scope.row[item.prop]==null||scope.row[item.prop]==''">
+              <span>-</span>
+            </div>
+            <div v-else>
+              <div v-if="item.tooltips">
+                <el-popover trigger="hover" placement="top">
+                  <p
+                    v-for="tooltip in item.tooltips"
+                  >{{tooltip.name}} : {{scope.row[tooltip.content]}}</p>
+                  <div slot="reference" class="name-wrapper">
+                    <el-tag size="medium">{{scope.row[item.prop]}}</el-tag>
+                  </div>
+                </el-popover>
+              </div>
+
+              <div v-else>
+                <span v-if="item.render" v-html="item.render(scope.row)"></span>
+                <span v-else v-text="scope.row[item.prop]"></span>
+              </div>
+            </div>
           </template>
         </el-table-column>
-      </el-table>
-   
+      </template>
+
+      <el-table-column
+        label="操作"
+        v-if="tableOperateList.length!=0"
+        align="center"
+        fixed="right"
+        width="270"
+      >
+        <template slot-scope="scope">
+          <!-- 操作按钮 -->
+          <el-button
+            v-for="(tableOperate,index) in tableOperateList"
+            :key="index"
+            :icon="tableOperate.icon"
+            :type="tableOperate.type"
+            size="mini"
+            v-has="tableOperate.vhas"
+            @click="tableOperate.method(index,scope.row)"
+          >{{tableOperate.name}}</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <!-- 分页 -->
     <div v-show="total!=0">
       <el-pagination
@@ -136,13 +139,9 @@ export default {
       radioStationVal: "",
       tableHeight: 50
     };
-
-   // console.log(this.tableData)
   },
   created() {},
-  mounted() {
-    
-  },
+  mounted() {},
   watch: {
     pageNum(val) {
       this.newPageNum = val;
@@ -177,7 +176,7 @@ export default {
           window.innerHeight - self.$refs.table.$el.offsetTop - 50;
       };
     });
-    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度 
+    //this.$refs.table.$el.offsetTop：表格距离浏览器的高度
     //50表示你想要调整的表格距离底部的高度（你可以自己随意调整），因为我们一般都有放分页组件的，所以需要给它留一个高度
   }
 };

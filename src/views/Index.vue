@@ -66,7 +66,7 @@
                 v-for="data in sub.data"
                 :index="data.componentName"
                 :key="data.componentName"
-                @click="switchSubMenu(data)"
+             
               >
                 <i :class="data.icon"></i>
                 <span v-text="data.name"></span>
@@ -77,7 +77,7 @@
               v-for="data in item.data"
               :index="data.componentName"
               :key="data.componentName"
-              @click="switchSubMenu(data)"
+             
             >
               <i :class="data.icon"></i>
               <span v-text="data.name"></span>
@@ -124,8 +124,10 @@
             </el-col>
           </el-row>
         </el-header>
-
-        <router-view />
+        <keep-alive>
+          <router-view />
+          <!--这里是会被缓存的组件-->
+        </keep-alive>
       </el-main>
     </el-container>
   </el-container>
@@ -149,7 +151,7 @@
 }
 
 .elbutton {
-  height: 60px;
+  height: 40px;
   font-size: 20px;
 }
 .elbadgeelbutton {
@@ -266,15 +268,10 @@ export default {
       this.$router
         .push({ path: this.options[this.options.length - 1].route })
         .catch(data => {});
-    },
-    switchSubMenu(route) {
-     // console.log(route);
     }
   },
   watch: {
     $route(to) {
-    //  console.log(to);
-      // console.log(this.$router.options);
       let flag = false;
       this.activeName = to.path;
       for (let option of this.options) {

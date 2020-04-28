@@ -46,9 +46,7 @@ export default {
             trigger: "blur"
           }
         ],
-        password: [
-          { required: true, message: "请输入密码", trigger: "blur" }
-        ]
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       },
       checked: false
     };
@@ -64,6 +62,7 @@ export default {
           ) {
             this.logining = false;
             sessionStorage.setItem("user", this.ruleForm.username);
+            sessionStorage.setItem("btnPermissions", ["admin"]);
             this.$router.push({ path: "Index" });
           } else {
             this.logining = false;

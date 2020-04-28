@@ -18,24 +18,22 @@ module.exports = [
       meta:
       {
         isLogin: false,
-        permission: [
-          {
-            name: "编辑",
-            // icon: "el-icon-edit",
-            type: "primary"
-          },
-          {
-            name: "详情",
-            // icon: "el-icon-chat-line-square",
-            type: "success"
-          },
-          {
-            name: "删除",
-            // icon: "el-icon-delete",
-            type: "danger"
-          },
-          
-        ],
+        permission: [{
+          name: "新增",
+          vhas: "line_add",
+        }, 
+        {
+          name: "编辑",
+          vhas: "line_edit",
+        },
+        {
+          name: "详情",
+          vhas: "line_details",
+        },
+        {
+          name: "删除",
+          vhas: "line_del",
+        }]
       },
     }, {
       name: 'Checkbox 多选框2',

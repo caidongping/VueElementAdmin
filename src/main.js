@@ -8,13 +8,18 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import 'element-ui/lib/theme-chalk/display.css';
 
+import has from './public/js/btnPermissions.js';
+
 import ElementUI from 'element-ui';
 
 import App from './app';
 
 Vue.config.productionTip = false;
 
-Vue.use(ElementUI);
+
+Vue.use(ElementUI)
+
+
 
 new Vue({
   el: '#app',
@@ -25,8 +30,6 @@ new Vue({
 })
 
 router.beforeEach((to, from, next) => {
-  // console.log(to);
-  // console.log(from);
   // console.log(to.name);
   // console.log(sessionStorage.getItem("user"));
   // if(sessionStorage.getItem("user")==='admin'|| to.name === 'Login')

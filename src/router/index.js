@@ -19,11 +19,16 @@ var routes = [
     component: Login
   },
   {
+    path: '*',
+    name: '404',
+    component: () => import('@/components/404')
+  },
+  {
     path: '/Index',
     name: 'Index',
     component: Index,
-    children: childrenroutes,
-    redirect: '/Main'
+    redirect: '/Main',
+    children: childrenroutes
   }
 ]
 
@@ -37,6 +42,7 @@ menus.forEach((item) => {
           path: `/${data.componentName}`,
           name: data.name,
           component: () => import(`@/views/Example/${data.componentName}`),
+          meta: data.meta,
         })
       })
     })
@@ -44,9 +50,10 @@ menus.forEach((item) => {
   else {
     item.data.forEach((data) => {
       childrenroutes.push({
-        path: `/${data.componentName}`,
+        path: `/${data.componentName}/`,
         name: data.name,
         component: () => import(`@/views/Example/${data.componentName}`),
+        meta:data.meta,
       })
     })
   }

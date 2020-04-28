@@ -1,6 +1,9 @@
 <template>
-<div>
-     
+  <div>
+    <div style="margin-left: 10px;">
+      <el-button @click="xx()" v-has="'line_add'">新增</el-button>
+    </div>
+
     <!-- table表格 -->
     <common-table
       :tableData="tableData"
@@ -12,8 +15,7 @@
       :tableOperateList="tableOperateList"
       :total="total"
     ></common-table>
-
-
+    
   </div>
 </template>
 
@@ -22,8 +24,6 @@ import commonTable from "@/components/common/commonTable";
 
 import table from "@/config/table";
 
-import tableOperate from "@/config/tableOperate";
-
 export default {
   components: { commonTable },
   data() {
@@ -31,12 +31,40 @@ export default {
       pageNum: 1,
       pageSize: 10,
       total: 20,
-      tableOperateList: tableOperate, //传table里面有那些操作
+      tableOperateList: [
+        {
+          name: "编辑",
+          icon: "el-icon-edit",
+          type: "primary",
+          vhas: "line_edit",
+          method: (index, row) => {
+            this.handleEdit(index, row);
+          }
+        },
+        {
+          name: "详情",
+          icon: "el-icon-chat-line-square",
+          type: "success",
+          vhas: "line_details",
+          method: (index, row) => {
+            this.handleDetails(index, row);
+          }
+        },
+        {
+          name: "删除",
+          icon: "el-icon-delete",
+          type: "danger",
+          vhas: "line_del",
+          method: (index, row) => {
+            this.handleDel(index, row);
+          }
+        }
+      ], //传table里面有那些操作
       tableData: table,
       tableSelect: true, //是否有多选操作列
       tableRadio: true, //是否有单选操作列
       tabCloum: [
-        { label: "设备编号", prop: "s1", width: "100px", fixed: true },
+        { label: "设备编号", prop: "s1", width: "100px" },
         { label: "设备名称", prop: "s2", width: "100px" },
         {
           label: "区域名称",
@@ -66,18 +94,29 @@ export default {
           }
         },
         { label: "站点名称", prop: "s5" },
-        // { label: "挂载设备数量", width: "250px", prop: "s6" },
+        { label: "挂载设备数量", width: "200px", prop: "s6" },
         // { label: "挂载设备数量", width: "250px", prop: "s6" },
         // { label: "挂载设备数量", width: "250px", prop: "s6" },
         { slot: "button", name: "操作" }
       ] // 操作列
     };
   },
-  created() {
-    console.log(this.$router);
-  },
+  created() {},
   mounted() {},
   watch: {},
-  methods: {}
+  methods: {
+    handleEdit(index, row) {
+      console.log(" index:", index);
+      console.log(" row:", row);
+    },
+    handleDetails(index, row) {
+      console.log(" index:", index);
+      console.log(" row:", row);
+    },
+    handleDel(index, row) {
+      console.log(" index:", index);
+      console.log(" row:", row);
+    }
+  }
 };
 </script>
