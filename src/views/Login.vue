@@ -17,6 +17,7 @@
         <el-input type="password" v-model="ruleForm.password" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <el-checkbox v-model="checked" class="rememberme">记住密码</el-checkbox>
+
       <el-form-item style="width:100%;">
         <el-button type="primary" style="width:100%;" @click="handleSubmit" :loading="logining">登录</el-button>
       </el-form-item>
@@ -30,13 +31,17 @@
 }
 </style>
 <script>
+import md5 from "js-md5";
+
+import axios from "axios";
+
 export default {
   data() {
     return {
       logining: false,
       ruleForm: {
-        username: "admin",
-        password: "123456"
+        username: "em989pl4",
+        password: "d4ab875222774b61b07cf95cde2fad7b"
       },
       rules: {
         username: [
@@ -56,20 +61,51 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.logining = true;
-          if (
-            this.ruleForm.username === "admin" &&
-            this.ruleForm.password === "123456"
-          ) {
-            this.logining = false;
-            sessionStorage.setItem("user", this.ruleForm.username);
-            sessionStorage.setItem("btnPermissions", ["admin"]);
-            this.$router.push({ path: "Index" });
-          } else {
-            this.logining = false;
-            this.$alert("用户名或密码错误!", "提示", {
-              confirmButtonText: "ok"
+          var timeSpan = new Date().getTime();
+          var content =
+            "licenseKey=" +
+            this.ruleForm.username +
+            "&timeSpan=" +
+            timeSpan +
+            "&secretKey=" +
+            this.ruleForm.password;
+          content = content.toUpperCase();
+          var sign = md5(content).toUpperCase();
+          var data = {
+            licenseKey: this.ruleForm.username,
+            timeSpan: timeSpan,
+            sign: sign
+          };
+
+          let _this = this;
+          axios
+            .post("/api/Authorize/DeviceLogin", data)
+            .then(function(res) {
+              _this.$store.commit("setToken", res.data.data.token);
+              _this.$store.commit("setExpiresTime", res.data.data.expiresTime);
+              _this.$store.commit("setInvalidTime", res.data.data.invalidTime);
+              console.log(_this.$router);
+              _this.$router.push({ path: "Index" });
+
+           
+            })
+            .catch(function(error) {
+              console.log(error);
             });
-          }
+          // if (
+          //   this.ruleForm.username === "em989pl4" &&
+          //   this.ruleForm.password === "d4ab875222774b61b07cf95cde2fad7b"
+          // ) {
+          //   this.logining = false;
+          //   sessionStorage.setItem("user", this.ruleForm.username);
+          //   sessionStorage.setItem("btnPermissions", ["admin"]);
+          //   this.$router.push({ path: "Index" });
+          // } else {
+          //   this.logining = false;
+          //   this.$alert("用户名或密码错误!", "提示", {
+          //     confirmButtonText: "ok"
+          //   });
+          // }
         } else {
           console.log("登录失败!");
           return false;

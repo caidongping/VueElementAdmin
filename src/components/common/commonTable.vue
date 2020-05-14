@@ -4,7 +4,7 @@
     <el-table
       :data="tableData"
       border
-      ref="table"
+      ref="tableref"
       :height="tableHeight"
       @selection-change="handleSelectionChange"
       style="width: 100% ;"
@@ -16,12 +16,12 @@
           <el-radio
             v-model="radioStationVal"
             :label="scope.$index"
-            @change="radioChange(scope.$index)"
+            @change="radioChange(scope.row)"
           >{{null}}</el-radio>
         </template>
       </el-table-column>
 
-      <el-table-column label="序号" align="center" width="50">
+      <el-table-column label="序号" align="center" width="50" v-if="tableOrder">
         <template slot-scope="scope">
           <span v-text="(pageNum-1)*pageSize+(scope.$index+1)"></span>
         </template>
@@ -106,14 +106,21 @@
 <script>
 export default {
   props: {
+    //多选
     tableSelect: {
       type: Boolean,
       default: false
-    }, //多选
+    },
+    //单选
     tableRadio: {
       type: Boolean,
       default: false
-    }, //单选
+    },
+    //序号
+    tableOrder: {
+      type: Boolean,
+      default: false
+    },
     tableData: {
       type: Array
     },
@@ -150,8 +157,9 @@ export default {
   methods: {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
+      this.$emit("handleSizeChange", val);
     },
-    // 当前页
+    //当前页
     handleCurrentChange(val) {
       this.$emit("handleCurrentChange", val);
     },
@@ -159,21 +167,21 @@ export default {
     handleSelectionChange(val) {
       this.$emit("handleSelectionChange", val);
     },
-    // 单选选事件
-    radioChange(id) {
-      this.$emit("radioChange", id);
+    //单选选事件
+    radioChange(row) {
+      this.$emit("radioChange", row);
     }
   },
   mounted: function() {
     this.$nextTick(function() {
       this.tableHeight =
-        window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+        window.innerHeight - this.$refs.tableref.$el.offsetTop - 50;
 
       // 监听窗口大小变化
       let self = this;
       window.onresize = function() {
         self.tableHeight =
-          window.innerHeight - self.$refs.table.$el.offsetTop - 50;
+          window.innerHeight - self.$refs.tableref.$el.offsetTop - 50;
       };
     });
     //this.$refs.table.$el.offsetTop：表格距离浏览器的高度

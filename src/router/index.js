@@ -19,18 +19,18 @@ var routes = [
     component: Login
   },
   {
-    path: '*',
-    name: '404',
-    component: () => import('@/components/404')
-  },
-  {
     path: '/Index',
     name: 'Index',
     component: Index,
     redirect: '/Main',
     children: childrenroutes
-  }
-]
+  },
+  {
+    path: '*',
+    name: '404',
+    component: () => import('@/components/404')
+  },
+];
 
 childrenroutes.push({ path: '/Main', name: '首页', component: () => import(`@/views/Example/Main`) });
 
@@ -53,12 +53,18 @@ menus.forEach((item) => {
         path: `/${data.componentName}/`,
         name: data.name,
         component: () => import(`@/views/Example/${data.componentName}`),
-        meta:data.meta,
+        meta: data.meta,
       })
     })
   }
-})
-export default new Router({
+});
+
+
+
+const router = new Router({
   routes,
-  mode: "history"    // mode 设置为history ，去掉地址栏上的 # 号
-})
+  mode: "history",   // mode 设置为history ，去掉地址栏上的 # 号
+});
+
+
+export default router;
